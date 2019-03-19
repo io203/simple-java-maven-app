@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'maven:3-alpine'
-            args '-v /root/.m2:/root/.m2'
+            args '-v /Users/blackstar/.m2:/root/.m2'
         }
     }
     
@@ -24,9 +24,9 @@ pipeline {
         }
         
         
-        stage('Deliver') {
+        stage('Docker-Image') {
             steps {
-                sh './jenkins/scripts/deliver.sh'
+                sh 'docker build -t saturn203/my-app:v1 .'
             }
         }
     }
