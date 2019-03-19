@@ -1,4 +1,8 @@
 pipeline {
+	environment {
+	    registry = "saturn203/my-app"
+	    registryCredential = 'dockerhub'
+	  }
     agent {
         docker {
             image 'maven:3-alpine'
@@ -13,10 +17,26 @@ pipeline {
             }
         }        
         
-        stage('Docker-Image') {
+        stage('Building image') {
             steps {
-                sh 'docker build -t saturn203/my-app:v1 .'
+               script {
+		          docker.build registry + ":$BUILD_NUMBER"
+		        }
             }
         }
+        stage('Deploy Image') {
+		  steps{
+		    script {
+		      docker.withRegistry( '', registryCredential ) {
+		        dockerImage.push()
+		      }
+		    }
+		  }
+		}
+		stage('Remove Unused docker image') {
+		  steps{
+		    sh "docker rmi $registry:$BUILD_NUMBER"
+		  }
+		}
     }
 }
