@@ -3,12 +3,7 @@ pipeline {
 	    registry = "saturn203/my-app"
 	    registryCredential = 'dockerhub'
 	  }
-    agent {
-        docker {
-            image 'maven:3-alpine'
-            args '-v /Users/blackstar/.m2:/root/.m2'
-        }
-    }
+    agent any
     
     stages {
         stage('Build') {
