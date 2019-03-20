@@ -21,8 +21,7 @@ pipeline {
         
         stage('Building image') {
             steps {  
-               sh "aws ecr get-login --no-include-email --region ap-northeast-2"         
-		      
+               
 		       sh "docker build -t $registry:$BUILD_NUMBER ."
 		        
             }
@@ -30,9 +29,12 @@ pipeline {
         stage('Deploy Image') {
 		  steps{
 			echo '========2-1====='
-			 
-		     sh "docker push  $registry:$BUILD_NUMBER"
+			  sh '''
+			    $(aws ecr get-login --no-include-email --region ap-northeast-2)
+		     	docker push  $registry:$BUILD_NUMBER
+			  '''
 			  echo '========2-2====='
+			  
 		  }
 		}
 		stage('Remove Unused docker image') {
