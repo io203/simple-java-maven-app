@@ -2,7 +2,7 @@ pipeline {
 	environment {
 	    registry = "saturn203/my-app"
 	    registryCredential = 'dockerhub'
-	    PATH = "$PATH"
+	    PATH = "$PATH:/usr/local/bin"
 	  }
     agent any
     tools {
