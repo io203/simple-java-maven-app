@@ -16,13 +16,16 @@ pipeline {
         
         stage('Building image') {
             steps {
+		     echo '========1-0====='
                script {
 		          dockerImage = docker.build registry + ":$BUILD_NUMBER"
 		        }
+		    echo '========1-1====='
             }
         }
         stage('Deploy Image') {
 		  steps{
+			echo '========2-1====='
 		    script {
 		      echo '----login- start------'
 		      docker.withRegistry( '', registryCredential ) {
@@ -31,6 +34,7 @@ pipeline {
 		      }
 		      echo '----login--end-----'
 		    }
+			  echo '========2-2====='
 		  }
 		}
 		stage('Remove Unused docker image') {
