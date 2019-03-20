@@ -26,6 +26,8 @@ pipeline {
 		        
             }
         }
+        
+        
         stage('Deploy Image') {
 		  steps{
 			echo '========2-1====='
