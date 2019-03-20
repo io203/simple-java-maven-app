@@ -15,15 +15,10 @@ pipeline {
         }        
         
         stage('Building image') {
-            steps {
-              echo '========1-0====='
-              try{
+            steps {  
+                         
 		       sh "docker build -t $registry:$BUILD_NUMBER ."
-		       echo '========1-1====='
-		      }catch(Exception ex){
-		        echo '===errror msg:'+ex.getMessage()
 		        
-		      }
             }
         }
         stage('Deploy Image') {
