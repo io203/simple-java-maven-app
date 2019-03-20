@@ -24,14 +24,7 @@ pipeline {
         stage('Deploy Image') {
 		  steps{
 			echo '========2-1====='
-		    script {
-		      echo '----login- start------'
-		      docker.withRegistry( '', registryCredential ) {
-		        echo '----login--success-----'
-		        dockerImage.push()
-		      }
-		      echo '----login--end-----'
-		    }
+		     sh "docker push "+ $registry:$BUILD_NUMBER
 			  echo '========2-2====='
 		  }
 		}
