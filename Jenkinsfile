@@ -18,9 +18,11 @@ pipeline {
             steps {
 		     echo '========1-0====='
                script {
+		       echo '========1-1====='
 		          dockerImage = docker.build registry + ":$BUILD_NUMBER"
+		       echo '========1-2====='
 		        }
-		    echo '========1-1====='
+		    echo '========1-3====='
             }
         }
         stage('Deploy Image') {
