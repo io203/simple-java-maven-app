@@ -19,9 +19,15 @@ pipeline {
 		     echo '========1-0====='
                script {
 		       echo '========1-1-0====='
+		       try{
 		          docker.build registry + ":$BUILD_NUMBER"
+			       
 		       echo '========1-2-1====='
-		        }
+		       }catch(Exception ex){
+			  echo '===errror msg:'+ ex.getMessage()       
+		       }
+			       
+		     }
 		    echo '========1-3====='
             }
         }
