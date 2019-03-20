@@ -10,25 +10,15 @@ pipeline {
     stages {
         stage('Build') {           
         	steps {
-                sh 'mvn -B -DskipTests clean package'
+                sh "mvn -B -DskipTests clean package"
             }
         }        
         
         stage('Building image') {
             steps {
-		     echo '========1-0====='
-               script {
-		       echo '========1-1-0====='
-		       try{
-		          docker.build registry + ":$BUILD_NUMBER"
-			       
-		       echo '========1-2-1====='
-		       }catch(Exception ex){
-			  echo '===errror msg:'+ ex.getMessage()       
-		       }
-			       
-		     }
-		    echo '========1-3====='
+              echo '========1-0====='
+		       sh "docker build -t $registry:$BUILD_NUMBER ."
+		       echo '========1-1====='
             }
         }
         stage('Deploy Image') {
