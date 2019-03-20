@@ -1,3 +1,6 @@
+def  imageTag = "saturn203/my-app:$BUILD_NUMBER"
+
+
 pipeline {
 	environment {
 	    registry = "saturn203/my-app"
@@ -31,6 +34,13 @@ pipeline {
 		stage('Remove Unused docker image') {
           steps{
             sh "docker rmi $registry:$BUILD_NUMBER"
+          }
+        }
+        
+        stage('Deploy Kubernetes') {
+          steps{
+            sh("sed -i.bak 's#saturn203/my-app:1.0#${imageTag}#' ./k8s/my-app.yaml")
+            sh "kubectl apply -f k8s/my-app.yaml"
           }
         }
 		
