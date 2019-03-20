@@ -21,7 +21,7 @@ pipeline {
         
         stage('Building image') {
             steps {  
-               sh "$(aws ecr get-login --no-include-email --region ap-northeast-2)"         
+               sh "aws ecr get-login --no-include-email --region ap-northeast-2"         
 		      
 		       sh "docker build -t $registry:$BUILD_NUMBER ."
 		        
