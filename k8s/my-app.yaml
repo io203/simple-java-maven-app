@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: edu-api
-        image: saturn203/my-app:1.0
+        image: 328755931990.dkr.ecr.ap-northeast-2.amazonaws.com/my-app:1.0
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
