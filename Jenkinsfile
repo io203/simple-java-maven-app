@@ -24,7 +24,7 @@ pipeline {
         stage('Deploy Image') {
 		  steps{
 			echo '========2-1====='
-		     sh "docker push "+ $registry:$BUILD_NUMBER
+		     sh "docker push  $registry:$BUILD_NUMBER"
 			  echo '========2-2====='
 		  }
 		}
