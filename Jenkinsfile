@@ -5,7 +5,7 @@ pipeline {
 	environment {
 	    registry = "saturn203/my-app"
 	    registryCredential = 'dockerhub'
-	    PATH = "$PATH:/usr/local/bin"
+	    PATH = "$PATH:/usr/local/bin:/Users/blackstar/dev/GCP/SDK/google-cloud-sdk/bin"
 	  }
     agent any
    
