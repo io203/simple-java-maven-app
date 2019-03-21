@@ -4,8 +4,7 @@ def  imageTag = "asia.gcr.io/my-gcp101/my-app:$BUILD_NUMBER"
 
 pipeline {
 	environment {
-	    registry = "328755931990.dkr.ecr.ap-northeast-2.amazonaws.com/my-app"
-	    registryCredential = 'dockerhub'
+	    registry = "asia.gcr.io/my-gcp101/my-app"	  
 	    PATH = "$PATH:/usr/local/bin:/Users/blackstar/dev/GCP/SDK/google-cloud-sdk/bin"
 	}
 	
