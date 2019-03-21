@@ -1,10 +1,9 @@
-def  imageTagHub = "saturn203/my-app:$BUILD_NUMBER"
-def  imageTag = "328755931990.dkr.ecr.ap-northeast-2.amazonaws.com/my-app:$BUILD_NUMBER"
+
+def  imageTag = "asia.gcr.io/my-gcp101/my-app:$BUILD_NUMBER"
 
 
 pipeline {
 	environment {
-	    registryHub = "saturn203/my-app"
 	    registry = "328755931990.dkr.ecr.ap-northeast-2.amazonaws.com/my-app"
 	    registryCredential = 'dockerhub'
 	    PATH = "$PATH:/usr/local/bin:/Users/blackstar/dev/GCP/SDK/google-cloud-sdk/bin"
@@ -26,13 +25,11 @@ pipeline {
 		        
             }
         }
-        
-        
+                
         stage('Deploy Image') {
 		  steps{
 			echo '========2-1====='
 			  sh '''
-			    $(aws ecr get-login --no-include-email --region ap-northeast-2)
 		     	docker push  $registry:$BUILD_NUMBER
 			  '''
 			  echo '========2-2====='
@@ -47,11 +44,9 @@ pipeline {
         
         stage('Deploy Kubernetes') {
           steps{
-            sh("sed -i.bak 's#328755931990.dkr.ecr.ap-northeast-2.amazonaws.com/my-app:1.0#${imageTag}#' ./k8s/my-app.yaml")
+            sh("sed -i.bak 's#asia.gcr.io/my-gcp101/my-app:1.0#${imageTag}#' ./k8s/my-app.yaml")
             sh "kubectl apply -f k8s/my-app.yaml"
           }
-        }
-		
-		
+        }		
     }
 }
