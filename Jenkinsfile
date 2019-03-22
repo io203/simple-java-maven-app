@@ -27,12 +27,7 @@ labels:
 spec:
   # Use service account that can deploy to all namespaces
   serviceAccountName: cd-jenkins
-  containers:
-  - name: java
-    image: java:8
-    command:
-    - cat
-    tty: true
+  containers: 
   - name: gcloud
     image: gcr.io/cloud-builders/gcloud
     command:
@@ -48,20 +43,14 @@ spec:
     }  
     
     stages {
-        stage('Build') {    
-        	agent {
-                docker { 
-                	image 'maven:3-alpine' 
-                }
-            }       
+        stage('Build') {            	   
         	steps {
                 sh "mvn -B -DskipTests clean package"
             }
         }        
         
         stage('Building image') {
-            steps {  
-               
+            steps {                
 		       sh "docker build -t $registry:$BUILD_NUMBER ."
 		        
             }
