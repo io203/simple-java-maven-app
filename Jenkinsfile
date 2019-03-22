@@ -19,7 +19,6 @@ pipeline {
     
     tools {
         maven "Maven"
-        
     }
     stages {
         stage('Build') {            	   
@@ -29,10 +28,10 @@ pipeline {
         }        
         
         stage('Building image') {
-            steps {                
-		       script {
-		          dockerImage = docker.build registry + ":$BUILD_NUMBER"
-		        }
+            steps {     
+            	container('docker') {           
+		       		sh "docker build -t $registry:$BUILD_NUMBER ."
+		       	}
 		        
             }
         }
@@ -40,15 +39,22 @@ pipeline {
                 
         stage('Deploy Image') {
 		  steps{
-			 script {
-			 	dockerImage.push()
-			 }
+		  	container('docker') {   
+				echo '========2-1====='
+				  sh '''
+			     	docker push  $registry:$BUILD_NUMBER
+				  '''
+				  echo '========2-2====='
+			}
 			  
 		  }
 		}
 		stage('Remove Unused docker image') {
           steps{
-            sh "docker rmi $registry:$BUILD_NUMBER"
+          
+          	container('docker') {   
+            	sh "docker rmi $registry:$BUILD_NUMBER"
+            }
           }
         }
         
