@@ -16,16 +16,32 @@ pipeline {
 	
 
     agent {
-	    kubernetes {
-	      label 'docker'
-	      containerTemplate {
-	        name 'docker'
-	        image 'docker:1.11'
-	        ttyEnabled true
-	        command 'cat'
-	      }
-	    }
-	  }
+    kubernetes {
+      label 'sample-app'
+      defaultContainer 'jnlp'
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+labels:
+  component: ci
+spec:
+  # Use service account that can deploy to all namespaces
+  serviceAccountName: cd-jenkins
+  containers:
+  - name: gcloud
+    image: gcr.io/cloud-builders/gcloud
+    command:
+    - cat
+    tty: true
+  - name: kubectl
+    image: gcr.io/cloud-builders/kubectl
+    command:
+    - cat
+    tty: true
+"""
+}
+  }
     
     tools {
         maven "Maven"
@@ -37,36 +53,18 @@ pipeline {
             }
         }        
         
-        stage('Building image') {
+        stage('Building image & Push') {
             steps {     
-            	container('docker') {           
-		       		sh "docker build -t $registry:$BUILD_NUMBER ."
-		       	}
+            	container('gcloud') {
+		          sh "PYTHONUNBUFFERED=1 gcloud builds submit -t ${imageTag} ."
+		        }
 		        
             }
         }
         
                 
-        stage('Deploy Image') {
-		  steps{
-		  	container('docker') {   
-				echo '========2-1====='
-				  sh '''
-			     	docker push  $registry:$BUILD_NUMBER
-				  '''
-				  echo '========2-2====='
-			}
-			  
-		  }
-		}
-		stage('Remove Unused docker image') {
-          steps{
-          
-          	container('docker') {   
-            	sh "docker rmi $registry:$BUILD_NUMBER"
-            }
-          }
-        }
+        
+		
         
         stage('Deploy Kubernetes') {
           steps{
