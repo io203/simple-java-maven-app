@@ -60,6 +60,7 @@ spec:
 		        
             }
         }
+        
                 
         stage('Deploy Image') {
 		  steps{
