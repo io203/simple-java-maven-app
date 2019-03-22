@@ -34,7 +34,7 @@ spec:
     - cat
     tty: true
   - name: mvn
-    image: 'maven:3-alpine
+    image: maven:3-alpine
     command:
     - cat
     tty: true
