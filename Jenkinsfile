@@ -15,7 +15,17 @@ pipeline {
 	}
 	
 
-    agent any
+    agent {
+	    kubernetes {
+	      label 'docker'
+	      containerTemplate {
+	        name 'docker'
+	        image 'docker:1.11'
+	        ttyEnabled true
+	        command 'cat'
+	      }
+	    }
+	  }
     
     tools {
         maven "Maven"
