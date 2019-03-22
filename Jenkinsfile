@@ -33,6 +33,11 @@ spec:
     command:
     - cat
     tty: true
+  - name: mvn
+    image: 'maven:3-alpine
+    command:
+    - cat
+    tty: true
   - name: gcloud
     image: gcr.io/cloud-builders/gcloud
     command:
