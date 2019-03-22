@@ -33,11 +33,6 @@ spec:
     command:
     - cat
     tty: true
-  - name: mvn
-    image: maven:3-alpine
-    command:
-    - cat
-    tty: true
   - name: gcloud
     image: gcr.io/cloud-builders/gcloud
     command:
@@ -53,7 +48,12 @@ spec:
     }  
     
     stages {
-        stage('Build') {           
+        stage('Build') {    
+        	agent {
+                docker { 
+                	image 'maven:3-alpine' 
+                }
+            }       
         	steps {
                 sh "mvn -B -DskipTests clean package"
             }
