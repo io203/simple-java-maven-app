@@ -26,7 +26,7 @@ labels:
   component: ci
 spec:
   # Use service account that can deploy to all namespaces
-  serviceAccountName: jenkins
+  serviceAccountName: cd-jenkins
   containers:
   - name: java
     image: java:8
