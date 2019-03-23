@@ -8,7 +8,7 @@ pipeline {
 	    registry = "asia.gcr.io/my-gcp101/my-app"	 
 	    dockerHome = tool 'docker'    
 	    gcloudHome = tool 'gcloud'         
-        PATH = "$PATH:${dockerHome}/bin:/Users/blackstar/dev/GCP/SDK/google-cloud-sdk/bin" 
+        PATH = "$PATH:${dockerHome}/bin:${gcloudHome}/bin" 
        
         
 	}
