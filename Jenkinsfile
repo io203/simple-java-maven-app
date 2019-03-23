@@ -6,8 +6,9 @@ pipeline {
 	
 	environment {
 	    registry = "asia.gcr.io/my-gcp101/my-app"	 
-	    dockerHome = tool 'docker'        
-        PATH = "$PATH:${dockerHome}/bin:${env.PATH}" 
+	    dockerHome = tool 'docker'    
+	    gcloudHome = tool 'gcloud'         
+        PATH = "$PATH:${dockerHome}/bin:${gcloudHome}/bin:${env.PATH}" 
         registryCredential = 'gcr-docker-auth'
 	}
 	
