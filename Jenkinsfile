@@ -12,9 +12,12 @@ pipeline {
 
     agent {
 	  label 'docker'
-	  label 'maven' 
+	  
 	}
-    
+	
+	tools {
+        maven "maven"
+    }
      
     stages {
         stage('Build') {            	   
