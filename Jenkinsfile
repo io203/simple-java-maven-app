@@ -1,22 +1,33 @@
-podTemplate(label: 'test-k8s', 
+podTemplate(
+    label: 'jenkins-pipeline', 
+    inheritFrom: 'default',
     containers: [
-        containerTemplate(name: 'test', image: 'gcr.io/cloud-solutions-images/jenkins-k8s-slave:latest', ttyEnabled: true, command: 'cat')    
-    ],
-    volumes: [
-        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
-        hostPathVolume(hostPath: '/usr/bin/docker', mountPath: '/usr/bin/docker')
-    ]
+      containerTemplate(name: 'docker', image: 'docker:18.06', command: 'cat', ttyEnabled: true)
+      ]
   ) {
-    node('test-k8s') {
-        container('test') {
-            stage('Run Command') {
+    node ('jenkins-pipeline') {
+      stage('Get latest version of code') {
+        checkout scm
+      }
 
-                
-                
-                sh("docker version");
-                sh 'gcloud version'
-
-            }
+      
+      
+      stage('Deploy Local') {
+        println 'Building docker image'
+        container('docker') { 
+          sh "echo \$'FROM nginx:stable-alpine \nCOPY ./dist /usr/share/nginx/html \n' > Dockerfile"
+          sh 'docker version' 
         }
-    }
-}
+
+        
+      } //end deploy local
+
+      
+
+      stage('Deploy Production') {
+      }
+
+      stage('Run Post Deployment Tests') {
+      }
+    } // end node
+  } // end podTemplate
