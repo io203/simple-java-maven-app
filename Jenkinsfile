@@ -39,6 +39,7 @@ spec:
     tty: true
 """
 }
+	}
 	
 	tools {
         maven "maven"
@@ -51,13 +52,14 @@ spec:
             }
         } 
         
-         stage('Build and push image with Container Builder') {
-      steps {
-        container('gcloud') {
-          sh "PYTHONUNBUFFERED=1 gcloud builds submit -t ${imageTag} ."
-        }
-      }
-    }
+        stage('Build and push image with Container Builder') {
+	      steps {
+	        container('gcloud') {
+	          sh "PYTHONUNBUFFERED=1 gcloud builds submit -t ${imageTag} ."
+	        }
+	      }
+	    }
+	    
 		stage('Remove Unused docker image') {
           steps{
             sh "docker rmi $registry:$BUILD_NUMBER"
