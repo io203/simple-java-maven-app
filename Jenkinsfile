@@ -10,7 +10,10 @@ pipeline {
 	
 	
 
-    agent any
+    agent {
+	  label 'docker'
+	  
+	}
 	
 	tools {
         maven "maven"
