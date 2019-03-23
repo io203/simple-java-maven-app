@@ -26,18 +26,17 @@ pipeline {
         
         stage('Building image') {
             steps {
-                sh "docker build -t $registry:$BUILD_NUMBER ."
+               sh "docker build -t $registry:$BUILD_NUMBER ."
             }
         }
         stage('Deploy Image') {
 		  steps{
-		   	sh '''
-                echo '----1----'
-                docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)" https://asia.gcr.io
-                echo '-----2----------'
-                docker push  $registry:$BUILD_NUMBER
-                echo '----3------'
-              '''
+		    script {
+		      docker.withRegistry( 'https://asia.gcr.io', registryCredential ) {
+		      
+		      		docker push  $registry:$BUILD_NUMBER
+		      }
+		    }
 		  }
 		}
 		stage('Remove Unused docker image') {
