@@ -1,10 +1,5 @@
 podTemplate(
-    label: 'jenkins-pipeline', 
-    inheritFrom: 'default',
-    containers: [
-      containerTemplate(name: 'docker', image: 'docker:18.06', command: 'cat', ttyEnabled: true)
-      ]
-  ) {
+    
     node ('jenkins-pipeline') {
       stage('Get latest version of code') {
         checkout scm
