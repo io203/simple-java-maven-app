@@ -34,41 +34,14 @@ spec:
 }
   }
 	
-	tools {
-        maven "maven"
-        
-    }
-     
+	
     stages {
-        stage('Build') {            	   
-        	steps {
-                sh "mvn -B -DskipTests clean package"
-            }
-        } 
-        
-        stage('Building image') {
-            steps {
-               sh "docker build -t $registry:$BUILD_NUMBER ."
-            }
-        }
-        stage('Deploy Image') {
-		  steps{
-		 	sh "gcloud auth configure-docker"
-		 	sh "docker push $registry:$BUILD_NUMBER"
-		  	
-		    
-		  }
-		}
-		stage('Remove Unused docker image') {
-          steps{
-            sh "docker rmi $registry:$BUILD_NUMBER"
-          }
-        }  
+     
         
         stage('Deploy Kubernetes') {
           steps{
           	container('kubectl') {
-	            sh("sed -i.bak 's#asia.gcr.io/my-gcp101/my-app:1.0#${imageTag}#' ./k8s/my-app.yaml")
+	           
 	            sh("kubectl apply  -f k8s/my-app.yaml")
 	        }
           }
