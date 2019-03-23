@@ -10,7 +10,10 @@ pipeline {
 	
 	
 
-    agent { docker 'maven:3-alpine' }
+    agent {
+	  label 'docker'
+	  label 'maven' 
+	}
     
      
     stages {
