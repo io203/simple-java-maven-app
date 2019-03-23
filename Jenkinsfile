@@ -6,13 +6,16 @@ pipeline {
   // Assign to docker slave(s) label, could also be 'any'
   agent any
   
+  environment {
+	    dockerHome = tool 'docker'
+        env.PATH = "${dockerHome}/bin:${env.PATH}"
+  }
+  
+  
   
 
   stages {
-  	stage('Initialize'){
-        def dockerHome = tool 'docker'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
-    }
+  	
     stage('Docker node test') {
       agent {
         docker {
