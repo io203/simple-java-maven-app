@@ -12,7 +12,28 @@ pipeline {
         
 	}
 	
-	agent any
+	agent {
+    kubernetes {
+      label 'sample-app'
+      defaultContainer 'jnlp'
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+labels:
+  component: ci
+spec:
+  # Use service account that can deploy to all namespaces
+   
+  containers:  
+  - name: kubectl
+    image: gcr.io/cloud-builders/kubectl
+    command:
+    - cat
+    tty: true
+"""
+}
+  }
 	
 	tools {
         maven "maven"
@@ -47,8 +68,10 @@ pipeline {
         
         stage('Deploy Kubernetes') {
           steps{
-            sh("sed -i.bak 's#asia.gcr.io/my-gcp101/my-app:1.0#${imageTag}#' ./k8s/my-app.yaml")
-            sh "kubectl apply  -f k8s/my-app.yaml"
+          	container('kubectl') {
+	            sh("sed -i.bak 's#asia.gcr.io/my-gcp101/my-app:1.0#${imageTag}#' ./k8s/my-app.yaml")
+	            sh("kubectl apply  -f k8s/my-app.yaml")
+	        }
           }
         }		   
        
