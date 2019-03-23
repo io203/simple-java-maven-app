@@ -34,7 +34,7 @@ pipeline {
 		    script {
 		      docker.withRegistry( 'https://asia.gcr.io', registryCredential ) {
 		      
-		      		docker push  $registry:$BUILD_NUMBER
+		      	echo '--------success-----------'
 		      }
 		    }
 		  }
