@@ -4,8 +4,10 @@
 
 pipeline {
   // Assign to docker slave(s) label, could also be 'any'
-  agent {
-    label 'docker' 
+  agent any
+  
+  tools{
+  	docker "docker"
   }
 
   stages {
