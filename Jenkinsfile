@@ -3,31 +3,40 @@
 
 
 pipeline {
-	
-	environment {
-	    registry = "asia.gcr.io/my-gcp101/my-app"	  
-	}
-	
-	
+  // Assign to docker slave(s) label, could also be 'any'
+  agent {
+    label 'docker' 
+  }
 
-    agent {
-	  label 'docker'
-	  
-	}
-	
-	tools {
-        maven "maven"
+  stages {
+    stage('Docker node test') {
+      agent {
+        docker {
+          // Set both label and image
+          label 'docker'
+          image 'node:7-alpine'
+          args '--name docker-node' // list any args
+        }
+      }
+      steps {
+        // Steps run in node:7-alpine docker container on docker slave
+        sh 'node --version'
+      }
     }
-     
-    stages {
-        stage('Build') {            	   
-        	steps {
-                sh "mvn -B -DskipTests clean package"
-            }
-        }        
-        
-        
-                
-       
+
+    stage('Docker maven test') {
+      agent {
+        docker {
+          // Set both label and image
+          label 'docker'
+          image 'maven:3-alpine'
+        }
+      }
+      steps {
+        // Steps run in maven:3-alpine docker container on docker slave
+        sh 'mvn --version'
+      }
     }
+  }
+} 
 }
