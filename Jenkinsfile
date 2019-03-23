@@ -1,12 +1,8 @@
-#!/usr/bin/groovy
 
-timestamps { 
 	podTemplate(
-	    label: 'je', 
-	    inheritFrom: 'default',
-	    containers: [
-	      containerTemplate(name: 'docker', image: 'docker:18.06', command: 'cat', ttyEnabled: true)
-	      ]
+	    label: 'je'
+	   
+	     
 	  ) {
 	    node ('je') {
 	      
@@ -21,4 +17,3 @@ timestamps {
 	
 	    } // end node
 	} // end podTemplate
-}
