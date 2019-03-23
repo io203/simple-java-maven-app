@@ -8,7 +8,8 @@ pipeline {
   
   environment {
 	    dockerHome = tool 'docker'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
+        
+        PATH = "$PATH:${dockerHome}/bin:${env.PATH}"
   }
   
   
