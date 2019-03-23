@@ -1,5 +1,6 @@
 
 
+def  imageTag = "asia.gcr.io/my-gcp101/my-app:$BUILD_NUMBER"
 
 
 pipeline {
@@ -11,7 +12,33 @@ pipeline {
         registryCredential = 'gcr-docker-auth'
 	}
 	
-	agent any
+	agent {
+    kubernetes {
+      label 'sample-app'
+      defaultContainer 'jnlp'
+      yaml """
+apiVersion: v1
+kind: Pod
+metadata:
+labels:
+  component: ci
+spec:
+  # Use service account that can deploy to all namespaces
+  
+  containers:
+  
+  - name: gcloud
+    image: gcr.io/cloud-builders/gcloud
+    command:
+    - cat
+    tty: true
+  - name: kubectl
+    image: gcr.io/cloud-builders/kubectl
+    command:
+    - cat
+    tty: true
+"""
+}
 	
 	tools {
         maven "maven"
@@ -24,19 +51,13 @@ pipeline {
             }
         } 
         
-        stage('Building image') {
-            steps {
-               sh "docker build -t $registry:$BUILD_NUMBER ."
-            }
+         stage('Build and push image with Container Builder') {
+      steps {
+        container('gcloud') {
+          sh "PYTHONUNBUFFERED=1 gcloud builds submit -t ${imageTag} ."
         }
-        stage('Deploy Image') {
-		  steps{
-		  	sh "docker login -u oauth2accesstoken -p ya29.GlzVBuh2ncMceaJMPm2SVduaR4q2mzzQvG89yRO8Moo88FF1F0gb1ITz43ez2Uq_R1_H39vKQn1In-kbwg7LlysfuLyc6FW3wfd3op8cNBfVhv7Q3w1vP7hV0xdHPA  https://asia.gcr.io" 
-		  	sh "docker push $registry:$BUILD_NUMBER"
-		  	
-		    
-		  }
-		}
+      }
+    }
 		stage('Remove Unused docker image') {
           steps{
             sh "docker rmi $registry:$BUILD_NUMBER"
