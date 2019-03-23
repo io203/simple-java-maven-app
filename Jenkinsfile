@@ -1,19 +1,17 @@
-
-	podTemplate(
-	    label: 'je'
-	   
-	     
-	  ) {
-	    node ('je') {
-	      
-	      stage('Deploy Local') {
-	        println 'Building docker image'
-	        
+pipeline {
+	environment {
+	    registry = "asia.gcr.io/my-gcp101/my-app"	  
+	    PATH = "$PATH:/usr/local/bin:/Users/blackstar/dev/GCP/SDK/google-cloud-sdk/bin"
+	}
 	
-	        
-	      } //end deploy local
-	
-	      
-	
-	    } // end node
-	} // end podTemplate
+    agent any   
+    
+    stages {
+        stage('Build') {           
+        	steps {
+                echo "========="
+            }
+        }        
+        
+    }
+}
