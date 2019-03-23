@@ -1,57 +1,22 @@
+podTemplate(label: 'test-k8s', cloud: 'local cluster', 
+    containers: [
+        containerTemplate(name: 'test', image: 'gcr.io/cloud-solutions-images/jenkins-k8s-slave:latest', ttyEnabled: true, command: 'cat')    
+    ],
+    volumes: [
+        hostPathVolume(hostPath: '/var/run/docker.sock', mountPath: '/var/run/docker.sock'),
+        hostPathVolume(hostPath: '/usr/bin/docker', mountPath: '/usr/bin/docker')
+    ]
+  ) {
+    node('test-k8s') {
+        container('test') {
+            stage('Run Command') {
 
+                checkout scm
+                
+                sh("docker version");
+                sh 'gcloud version'
 
-def  imageTag = "asia.gcr.io/my-gcp101/my-app:$BUILD_NUMBER"
-
-pipeline {
-	
-	environment {
-	    registry = "asia.gcr.io/my-gcp101/my-app"	 
-	    dockerHome = tool 'docker'    
-	    gcloudHome = tool 'gcloud'         
-        PATH = "$PATH:${dockerHome}/bin:${gcloudHome}/bin" 
-       
-        
-	}
-	
-	agent any
-	
-	tools {
-        maven "maven"
-        
-    }
-     
-    stages {
-        stage('Build') {            	   
-        	steps {
-                sh "mvn -B -DskipTests clean package"
-            }
-        } 
-        
-        stage('Building image') {
-            steps {
-               sh "docker build -t $registry:$BUILD_NUMBER ."
             }
         }
-        stage('Deploy Image') {
-		  steps{
-		 	sh "gcloud auth configure-docker"
-		 	sh "docker push $registry:$BUILD_NUMBER"
-		  	
-		    
-		  }
-		}
-		stage('Remove Unused docker image') {
-          steps{
-            sh "docker rmi $registry:$BUILD_NUMBER"
-          }
-        }  
-        
-        stage('Deploy Kubernetes') {
-          steps{
-            sh "sed -i.bak 's#asia.gcr.io/my-gcp101/my-app:1.0#${imageTag}#' ./k8s/my-app.yaml"
-            sh "kubectl apply  -f k8s/my-app.yaml"
-          }
-        }		   
-       
     }
 }
