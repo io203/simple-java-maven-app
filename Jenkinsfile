@@ -1,6 +1,6 @@
 
 
-
+def  imageTag = "asia.gcr.io/my-gcp101/my-app:$BUILD_NUMBER"
 
 pipeline {
 	
@@ -9,7 +9,7 @@ pipeline {
 	    dockerHome = tool 'docker'    
 	    gcloudHome = tool 'gcloud'         
         PATH = "$PATH:${dockerHome}/bin:${gcloudHome}/bin:${env.PATH}" 
-        registryCredential = 'gcr-docker-auth'
+        
 	}
 	
 	agent any
