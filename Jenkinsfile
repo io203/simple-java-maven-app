@@ -16,7 +16,7 @@ pipeline {
 	
 	tools {
         maven "maven"
-        gcloud "gcloud"
+        
     }
      
     stages {
