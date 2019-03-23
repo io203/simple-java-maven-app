@@ -43,11 +43,14 @@ pipeline {
           steps{
             sh "docker rmi $registry:$BUILD_NUMBER"
           }
-        }
-           
+        }  
         
-        
-                
+        stage('Deploy Kubernetes') {
+          steps{
+            sh("sed -i.bak 's#asia.gcr.io/my-gcp101/my-app:1.0#${imageTag}#' ./k8s/my-app.yaml")
+            sh "kubectl apply  -f k8s/my-app.yaml"
+          }
+        }		   
        
     }
 }
