@@ -34,7 +34,7 @@ pipeline {
         stage('Deploy Image') {
 		  steps{
 		    script {
-		      docker.withRegistry( '', registryCredential ) {
+		      docker.withRegistry( 'asia.gcr.io/my-gcp101/my-app', registryCredential ) {
 		        dockerImage.push()
 		      }
 		    }
