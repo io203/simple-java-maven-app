@@ -33,8 +33,8 @@ pipeline {
         }
         stage('Deploy Image') {
 		  steps{
-		  
-		  	 sh 'gcloud --version'
+		 	sh "gcloud auth configure-docker"
+		 	sh "docker push $registry:$BUILD_NUMBER"
 		  	
 		    
 		  }
