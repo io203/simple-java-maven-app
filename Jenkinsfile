@@ -33,8 +33,9 @@ pipeline {
         }
         stage('Deploy Image') {
 		  steps{
-		  	sh "docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)"  https://asia.gcr.io" 
-		  	sh "docker push $registry:$BUILD_NUMBER"
+		  	#sh "docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)"  https://asia.gcr.io" 
+		  	#sh "docker push $registry:$BUILD_NUMBER"
+		  	 sh 'gcloud --version'
 		  	
 		    
 		  }
